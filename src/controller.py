@@ -1,11 +1,18 @@
-import uvicorn
 from fastapi import FastAPI
 from typing import Optional
 from pydantic import BaseModel
 from entity import *
 import service
 
-app = FastAPI()
+app = FastAPI(title='api-guardia',
+              description='api para poder gestionar servicios relacionados con los guardias',
+              version='0.0.1')
+
+
+
+@app.get('/')
+def prueba():
+    return 'Funciona Correctamente'
 
 class GuardiaController(BaseModel):
 

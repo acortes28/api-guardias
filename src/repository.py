@@ -1,6 +1,7 @@
 from connection import ConexionDbGuardias
 from pydantic import BaseModel
 from entity import *
+from datetime import datetime
 
 
 class GuardiaDbReptry(BaseModel):
@@ -49,19 +50,48 @@ class GuardiaDbReptry(BaseModel):
         
         cursor = cnx.cursor()
 
-        cursor.execute("INSERT INTO gestionseguridad.guardia (nombre, apellidoPaterno, apellidoMaterno, rut, DV, domicilio, comuna, fechaInicioContratacion, fechaFinContratacion, fechaInicioOs10, fechaFinOs10) VALUES " 
-                    + '(\'' + guardia.nombre + '\','
-                    + '\'' + guardia.apellidoPaterno + '\','
-                    + '\'' + guardia.apellidoMaterno + '\','
-                    + '\'' + str(guardia.rut) + '\','
-                    + '\'' + guardia.DV + '\','
-                    + '\'' + guardia.domicilio + '\','
-                    + '\'' + guardia.comuna + '\','
-                    + '\'' + str(guardia.fechaInicioContratacion) + '\','
-                    + '\'' + str(guardia.fechaFinContratacion) + '\','
-                    + '\'' + str(guardia.fechaInicioOs10) + '\','
-                    + '\'' + str(guardia.fechaFinOs10) + '\')'
-                    )
-        cnx.close()
+        query = 'INSERT INTO gestionseguridad.guardia (nombre, apellidoPaterno, apellidoMaterno, rut, DV, domicilio, comuna, fechaInicioContratacion, fechaFinContratacion, fechaInicioOs10, fechaFinOs10) VALUES (?,?,?,?,?,?,?,?,?,?,?)'
         
+        #print(guardia.__dict__)
+        print(str(guardia.fechaInicioContratacion))
+        print("Registro insertado exitosamente")
+        try:
+            cursor.execute(query,(str(guardia.nombre),
+                                str(guardia.apellidoPaterno),
+                                str(guardia.apellidoMaterno),
+                                str(guardia.rut),
+                                str(guardia.DV),
+                                str(guardia.domicilio),
+                                str(guardia.comuna),
+                                str(guardia.fechaInicioContratacion),
+                                str(guardia.fechaFinContratacion),
+                                str(guardia.fechaInicioOs10),
+                                str(guardia.fechaFinOs10)
+                                )
+            )
+            cnx.commit()
+            
+            cnx.close()
+        except:
+            print("Error al intentar insertar a la BD")
+            cnx.close()
         
+
+# gsdb = GuardiaDbReptry()
+
+# ggss = Guardia(nombre='Rodrigo',
+#                apellidoPaterno='Munoz',
+#                apellidoMaterno='California',
+#                rut=28827384,
+#                DV='K',
+#                domicilio='estela 1219',
+#                comuna='San Miguel',
+#                fechaInicioContratacion='2022-01-30 15:00:00',
+#                fechaFinContratacion='2022-05-29 16:00:00',
+#                fechaInicioOs10='2022-01-01 17:00:00',
+#                fechaFinOs10='2022-01-01 18:00:00'
+#                ) 
+
+# #print(ggss.__dict__)
+
+# gsdb.agregarGuardia(ggss)
